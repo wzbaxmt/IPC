@@ -80,21 +80,24 @@ int main(int argc , char ** argv)
 
 	/*(4) 消息处理*/
 	char sendline[MAX_LINE] , recvline[MAX_LINE];
+	bzero(&sendline , MAX_LINE);
+	bzero(&recvline , MAX_LINE);
 	while(fgets(sendline , MAX_LINE , stdin) != NULL)	
 	{
 		write(sockfd , sendline , strlen(sendline));
-		printf("send to server %s\n",sendline);
+		printf("send to server %s",sendline);
 		if(readline(sockfd , recvline , MAX_LINE) == 0)
 		{
 			perror("server terminated prematurely");
 			exit(1);
 		}
-		printf("recv from server %s\n",recvline);
+		printf("recv from server %s",recvline);
 		if(fputs(recvline , stdout) == EOF)
 		{
 			perror("fputs error");
 			exit(1);
 		}
+		printf("*****************************************\n");
 	}
 
 	/*(5) 关闭套接字*/

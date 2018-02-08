@@ -63,12 +63,16 @@ int main(int argc , char **argv)
 			perror("accept error");
 			exit(1);
 		}
-
+		int pid;
+		printf("parent pid is %d",pid);
 		//新建子进程单独处理链接
 		if((childpid = fork()) == 0) 
 		{
 			close(listenfd);
 			//str_echo
+			int pid ;
+			pid = getpid();
+			printf("child pid is %d",pid);
 			ssize_t n;
 			char buff[MAX_LINE];
 			while((n = read(connfd , buff , MAX_LINE)) > 0)
@@ -76,7 +80,8 @@ int main(int argc , char **argv)
 				printf("recv from client %s",buff);
 				write(connfd , buff , n);
 				printf("send to client %s",buff);
-				printf
+				bzero(&buff , MAX_LINE);
+				printf("*****************************************\n");
 			}
 			exit(0);//正常退出程序
 		}
