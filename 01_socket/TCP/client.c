@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
 #include <netinet/in.h>
@@ -41,19 +42,16 @@ ssize_t readline(int fd, char *vptr, size_t maxlen)
 }
 
 
-int main(int argc , char ** argv)
+int main(void)
 {
 	/*声明套接字和链接服务器地址*/
 	int sockfd;
 	struct sockaddr_in servaddr;
-
-	/*判断是否为合法输入*/
-	if(argc != 2)
-	{
-		perror("usage:tcpcli <IPaddress>");
-		exit(1);
-	}
-
+	char *srv_ip;
+	int pid;
+	srv_ip = "127.0.0.1";
+	pid = getpid();
+	printf("parent pid is %d\n",pid);
 	/*(1) 创建套接字*/
 	if((sockfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
 	{
@@ -65,9 +63,9 @@ int main(int argc , char ** argv)
 	bzero(&servaddr , sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
-	if(inet_pton(AF_INET , argv[1] , &servaddr.sin_addr) < 0)
+	if(inet_pton(AF_INET , srv_ip , &servaddr.sin_addr) < 0)
 	{
-		printf("inet_pton error for %s\n",argv[1]);
+		printf("inet_pton error for %s\n",srv_ip);
 		exit(1);
 	}
 

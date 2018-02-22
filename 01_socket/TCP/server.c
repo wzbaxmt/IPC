@@ -58,13 +58,14 @@ int main(int argc , char **argv)
 	for( ; ; )
 	{
 		clientlen = sizeof(cliaddr);
-		if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clientlen)) < 0 )
+		if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clientlen)) < 0 )//static int accept(struct socket *sock, struct socket *new_sock, int flags)
 		{
 			perror("accept error");
 			exit(1);
 		}
 		int pid;
-		printf("parent pid is %d",pid);
+		pid = getpid();
+		printf("parent pid is %d\n",pid);
 		//新建子进程单独处理链接
 		if((childpid = fork()) == 0) 
 		{
@@ -72,7 +73,7 @@ int main(int argc , char **argv)
 			//str_echo
 			int pid ;
 			pid = getpid();
-			printf("child pid is %d",pid);
+			printf("child pid is %d\n",pid);
 			ssize_t n;
 			char buff[MAX_LINE];
 			while((n = read(connfd , buff , MAX_LINE)) > 0)
